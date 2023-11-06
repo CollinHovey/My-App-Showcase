@@ -2,6 +2,8 @@
 import { useState } from "react"
 import Deck from "../components/deck"
 import Image from "next/image"
+import DisplayWinner from "../components/displayWinner"
+import Nav from "../components/nav"
 
 export default function Blackjack() {
     const [userHand, setUserHand] = useState([])
@@ -11,19 +13,21 @@ export default function Blackjack() {
     const [gameState, setGameState] = useState(0)
     const [deck, setDeck] = useState(null);
     const [disable, setDisable] = useState(false)
+    const [displayEnd, setDisplayEnd] = useState(<></>)
 
     function startGame() {
-        console.log('Start new game')
         let restartDeck = new Deck()
         restartDeck.shuffle()
         const user = []
         const house = []
         const players = [user, house]
         restartDeck.startingDeal(2, players)
+        setDisplayEnd(<></>)
         setDeck(restartDeck)
         setUserHand(players[0])
         setHouseHand(players[1])
         setGameState(1)
+        setDisable(false)
         const userScore = calculateScore(players[0], 'user')
         const houseScore = calculateScore(players[1], 'house')
         calculateCondition(userScore, 'user')
@@ -34,7 +38,6 @@ export default function Blackjack() {
         if (!disable) {
             let newHand = userHand.slice()
             let newCard = deck.deal1()
-            console.log('new card', newCard)
             newHand.push(newCard)
             setUserHand(newHand)
             const score = calculateScore(newHand, 'user')
@@ -42,12 +45,45 @@ export default function Blackjack() {
         }
     }
 
+    function stand() {
+        if (!disable) {
+            setDisable(true)
+            let houseFinalScore = housePlay()
+            let gameEnded = calculateCondition(houseFinalScore, 'house')
+            if (!gameEnded) {
+                let winner = ''
+                if (userScore > houseFinalScore) {
+                    winner = 'user'
+                } else if (userScore < houseFinalScore) {
+                    winner = 'house'
+                } else if (userScore === houseFinalScore) {
+                    winner = 'tie'
+                }
+                endGame(winner)
+            }
+        }
+        
+    }
+
+    function housePlay() {
+        let currentHouseScore = houseScore
+        let currentHand = houseHand.slice()
+        let stop_plz = 0
+
+        while (currentHouseScore < 17 && stop_plz < 40) {
+            let newCard = deck.deal1()
+            currentHand.push(newCard)
+            setHouseHand(currentHand)
+            currentHouseScore = calculateScore(currentHand, 'house')
+            stop_plz++;
+        }
+        return currentHouseScore
+    }
+
     function calculateScore(hand, player) {
-        console.log(hand)
         let newScore = 0
         let aceCount = 0
         for (let x = 0; x < hand.length; x++) {
-            // console.log(hand[x][0], Number.isInteger(hand[x][0]))
             if (hand[x][0] === 'jack' || hand[x][0] === 'queen' || hand[x][0] === 'king') {
                 newScore += 10
             }
@@ -60,61 +96,63 @@ export default function Blackjack() {
             }
         }
 
-        while (newScore > 21 && aceCount > 0) {
+
+        while ((newScore > 21 && aceCount > 0) || (player === 'house' && aceCount > 0 && newScore === 17)) {
             newScore -= 10;
             aceCount--;
+            if (newScore > 21 && aceCount > 0) {
+            } else if (player === 'house' && aceCount > 0 && newScore === 17) {
+            } 
         }
         
         if (player === 'user') {
             setUserScore(newScore)
-        }
-        if (player === 'house') {
+        } else if (player === 'house') {
             setHouseScore(newScore)
         }
-        console.log(`${player} newScore`, newScore)
-        // console.log('isUserHand', player === 'user')
-        // console.log('isHouseHand', player === 'house')
         return newScore
     }
 
     function calculateCondition(score, player) {
         if (player === 'user') {
             if (score === 21) {
-                console.log('Blackjack you win')
                 setDisable(true)
-            }
-            if (score > 21) {
-                console.log('You Bust')
+                endGame('user')
+            } else if (score > 21) {
                 setDisable(true)
+                endGame('house')
+            } else {
+                return false
             }
         }
+
+        if (player === 'house') {
+            if (score === 21) {
+                setDisable(true)
+                endGame('house')
+            } else if (score > 21) {
+                setDisable(true)
+                endGame('user')
+            } else {
+                return false
+            }
+        }
+    }
+
+    function endGame(winner) {
+        setDisplayEnd(<DisplayWinner winner={winner} startGame={startGame}/>)
     }
     
     let board = <></>
     if (gameState === 1) {
 
         let houseDisplayHand = houseHand.map((card, index) => {
-            let findSuite = 'default'
-            if (card[1] === 0) {
-                findSuite = 'diamonds'
-            }
-            if (card[1] === 1) {
-                findSuite = 'clubs'
-            }
-            if (card[1] === 2) {
-                findSuite = 'hearts'
-            }
-            if (card[1] === 3) {
-                findSuite = 'spades'
-            }
-            
-
-            // <img key={index}>{`${houseHand[index][0]} of ${findSuite}`}</>})
+            let imagePath = deck.getCardImagePath(card)
 
             return (
                 <Image
-                    src={`/images/deckofcards/${houseHand[index][0]}_of_${findSuite}.png`} //
-                    alt={`Picture of ${houseHand[index][0]} of ${findSuite}`}
+                    src={imagePath}
+                    alt={`Picture of ${card[0]} of ${deck.findSuite(card[1])}`}
                     width={100}
                     height={100}
                     key={index}
@@ -123,29 +161,16 @@ export default function Blackjack() {
             })
 
         let userDisplayHand = userHand.map((card, index) => {
-            let findSuite = 'default'
-            if (card[1] === 0) {
-                findSuite = 'diamonds'
-            }
-            if (card[1] === 1) {
-                findSuite = 'clubs'
-            }
-            if (card[1] === 2) {
-                findSuite = 'hearts'
-            }
-            if (card[1] === 3) {
-                findSuite = 'spades'
-            }
+            let imagePath = deck.getCardImagePath(card)
             return (
                 <Image
-                    src={`/images/deckofcards/${card[0]}_of_${findSuite}.png`} //
-                    alt={`Picture of ${card[0]} of ${findSuite}`}
+                    src={imagePath}
+                    alt={`Picture of ${card[0]} of ${deck.findSuite(card[1])}`}
                     width={100}
                     height={100}
                     key={index}
                 />
             )
-            // return <p key={index}>{`${userHand[index][0]} of ${findSuite}`}</p>
         })
 
         board = <>
@@ -156,9 +181,6 @@ export default function Blackjack() {
                     {houseDisplayHand}
                 </div>
             </div>
-            <div className="basis-2/3">
-                <h1 className="text-3xl mt-4 mb-4">The Deck</h1>
-            </div>
             <div className="mt-4 mb-4 w-1/2 flex flex-col">
                 <div className="flex justify-evenly w-auto">
                     {userDisplayHand}
@@ -167,7 +189,7 @@ export default function Blackjack() {
             </div>
             <div className="flex w-1/2 justify-evenly">
                 <button className="text-3xl bg-sky-200 py-2 px-4 rounded-full" onClick={() => hitPlayer()}>Hit</button>
-                <button className="text-3xl bg-sky-200 py-2 px-4 rounded-full">Stand</button>
+                <button className="text-3xl bg-sky-200 py-2 px-4 rounded-full"onClick={() => stand()}>Stand</button>
             </div>
         </>
     }
@@ -176,8 +198,10 @@ export default function Blackjack() {
 
     return (
         <>
+            {displayEnd}
+            <Nav />
             <div className="flex justify-center">
-            <h1 className="text-5xl text-center m-4">Blackjack</h1>
+                <h1 className="text-5xl text-center m-4">Blackjack</h1>
                 <button onClick={startGame} className="text-3xl bg-sky-200 py-2 px-4 rounded-full">{(gameState === 0) ? 'Start Game' : 'Replay'}</button>
             </div>
             <div className="flex items-center flex-col mt-8 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -21,7 +21,7 @@ export default class Deck {
         }
     }
 
-    startingDeal(numberOfCards, players){
+    startingDeal(numberOfCards, players) {
         for (let x = 0; x < numberOfCards; x++) {
             for (let y = 0; y < players.length; y++) {
                 players[y].push(this.deal1())
@@ -29,11 +29,33 @@ export default class Deck {
         }
     }
 
-    deal1(){
+    deal1() {
         return this.deck.pop();
       }
 
-    show(){
+    show() {
         return this.deck;
+    }
+
+    findSuite(card) {
+        let findSuite = 'default'//See comment above
+            if (card === 0) {
+                findSuite = 'diamonds'
+            }
+            if (card === 1) {
+                findSuite = 'clubs'
+            }
+            if (card === 2) {
+                findSuite = 'hearts'
+            }
+            if (card === 3) {
+                findSuite = 'spades'
+            }
+        return findSuite
+    }
+
+    getCardImagePath(card) {
+        let findSuite = this.findSuite(card[1])
+        return `/images/deckofcards/${card[0]}_of_${findSuite}.png`
     }
 }
