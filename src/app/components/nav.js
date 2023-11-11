@@ -4,8 +4,11 @@ export default function Nav() {
 
 
     return (
-        <div>
-            <a href="/">Home</a>
-        </div>
+        <>
+            <div className="my-2">
+                <a className="text-xl" href="/">Home</a>
+            </div>
+            <hr></hr>
+        </>   
     )
 }
