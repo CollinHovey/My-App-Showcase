@@ -41,26 +41,26 @@ export default function Home() {
   let allAppsDisplay = allApps.map((app, index) => {
 
     return(
-      <li class="py-4">
+      <li className="py-4" key={index}>
         <div>
-            <li class="col-span-1 flex flex-col divide-y rounded-lg bg-white text-center shadow">
-            <div class="flex flex-1 flex-col p-8">
-              <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={app.image} alt=""></img>
-              <h3 class="mt-6 text-sm font-medium text-gray-900">{app.name}</h3>
-              <dl class="mt-1 flex flex-grow flex-col justify-between">
-                <dt class="sr-only">Description</dt>
-                <dd class="text-sm text-gray-500">{app.description}</dd>
-                <dt class="sr-only">Player Count</dt>
-                <dd class="mt-3">
-                  <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">1 Player</span>
+            <div className="col-span-1 flex flex-col divide-y rounded-lg bg-white text-center shadow">
+            <div className="flex flex-1 flex-col p-8">
+              <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={app.image} alt=""></img>
+              <h3 className="mt-6 text-sm font-medium text-gray-900">{app.name}</h3>
+              <dl className="mt-1 flex flex-grow flex-col justify-between">
+                <dt className="sr-only">Description</dt>
+                <dd className="text-sm text-gray-500">{app.description}</dd>
+                <dt className="sr-only">Player Count</dt>
+                <dd className="mt-3">
+                  <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">1 Player</span>
                 </dd>
               </dl>
             </div>
             <div>
-              <div class="-mt-px flex divide-x hover:bg-gray-200 hover:rounded-bl-lg hover:rounded-br-lg ease-out duration-300">
-                <div class="flex w-0 flex-1">
-                  <a href={app.link} class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                  <svg class="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+              <div className="-mt-px flex divide-x hover:bg-gray-200 hover:rounded-bl-lg hover:rounded-br-lg ease-out duration-300">
+                <div className="flex w-0 flex-1">
+                  <a href={app.link} className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                  <svg className="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
                   </svg>
                     Play
@@ -68,7 +68,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </li>
+          </div>
         </div>
       </li>
     )
