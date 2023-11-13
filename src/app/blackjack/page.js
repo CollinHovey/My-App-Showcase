@@ -54,6 +54,8 @@ export default function Blackjack() {
                 let winner = ''
                 if (userScore > houseFinalScore) {
                     winner = 'user'
+                } else if (houseFinalScore > 21) {
+                    winner = 'user'
                 } else if (userScore < houseFinalScore) {
                     winner = 'house'
                 } else if (userScore === houseFinalScore) {
