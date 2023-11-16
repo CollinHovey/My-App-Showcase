@@ -13,10 +13,10 @@ export default function Home() {
       image: '/images/blackjack.png'
     },
     {
-      name: 'Test1',
-      link: '/blackjack',
-      description: 'This is a test card to see how all the formatting works out. I will try to make it all look very nice',
-      image: '/images/blackjack.png'
+      name: 'Calculator',
+      link: '/calculator',
+      description: 'Punch in some numbers and get some answers. Pretty straightforward.',
+      image: '/images/calculator.png'
     },
     {
       name: 'Test1',
