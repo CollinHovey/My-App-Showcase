@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react"
 import Nav from "./components/nav"
+import Image from "next/image"
 
 export default function Home() {
 
@@ -10,31 +11,36 @@ export default function Home() {
       name: 'Blackjack',
       link: '/blackjack',
       description: 'Looking at your hand, choose to hit or stand to have a higher core than the house. Be careful though, getting over 21 will make you bust!',
-      image: '/images/blackjack.png'
+      image: '/images/blackjack.png',
+      alt: 'Blackjack Icon'
     },
     {
       name: 'Calculator',
       link: '/calculator',
       description: 'Punch in some numbers and get some answers. Pretty straightforward.',
-      image: '/images/calculator.png'
+      image: '/images/calculator.png',
+      alt: 'Calculator Icon'
+    },
+    {
+      name: 'Chess',
+      link: '/chess',
+      description: `Play against a friend to see who's the real grandmaster.`,
+      image: '/images/chesspieces/blackBishop.png',
+      alt: 'Chess Icon'
     },
     {
       name: 'Test1',
       link: '/blackjack',
       description: 'This is a test card to see how all the formatting works out. I will try to make it all look very nice',
-      image: '/images/blackjack.png'
+      image: '/images/blackjack.png',
+      alt: 'Test Icon'
     },
     {
       name: 'Test1',
       link: '/blackjack',
       description: 'This is a test card to see how all the formatting works out. I will try to make it all look very nice',
-      image: '/images/blackjack.png'
-    },
-    {
-      name: 'Test1',
-      link: '/blackjack',
-      description: 'This is a test card to see how all the formatting works out. I will try to make it all look very nice',
-      image: '/images/blackjack.png'
+      image: '/images/blackjack.png',
+      alt: 'Test Icon'
     }
   ]
 
@@ -45,7 +51,14 @@ export default function Home() {
         <div>
             <div className="col-span-1 flex flex-col divide-y rounded-lg bg-white text-center shadow">
             <div className="flex flex-1 flex-col p-8">
-              <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={app.image} alt=""></img>
+              <Image
+              src={app.image}
+              alt={app.alt}
+              width={100}
+              height={100}
+              className="mx-auto flex-shrink-0 rounded-full"
+              />
+              {/* <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={app.image} alt={app.alt}></img> */}
               <h3 className="mt-6 text-sm font-medium text-gray-900">{app.name}</h3>
               <dl className="mt-1 flex flex-grow flex-col justify-between">
                 <dt className="sr-only">Description</dt>
@@ -83,7 +96,7 @@ export default function Home() {
         <h1 className="">Welcome To The Showcase!</h1>
       </div>
       <div className="flex mx-10 mt-2">
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 items-stretch">
           {allAppsDisplay}
         </ul>
       </div>

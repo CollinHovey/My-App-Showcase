@@ -12,6 +12,15 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      flexBasis: {
+        '1/8': '12.5%'
+      },
+      width: {
+        '15': '3.75rem'
+      },
+      height: {
+        '15': '3.75rem'
+      }
     },
   },
   plugins: [],
