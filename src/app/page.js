@@ -96,7 +96,7 @@ export default function Home() {
         <h1 className="">Welcome To The Showcase!</h1>
       </div>
       <div className="flex mx-10 mt-2">
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 items-stretch">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 items-center">
           {allAppsDisplay}
         </ul>
       </div>
